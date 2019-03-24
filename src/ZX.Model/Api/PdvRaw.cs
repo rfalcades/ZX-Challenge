@@ -31,4 +31,9 @@ namespace ZX.Model.Api
         public CoverageArea coverageArea { get; set; }
         public Address address { get; set; }
     }
+
+    public class PdvRawCollection
+    {
+        public List<PdvRaw> pdvs { get; set; }
+    }
 }

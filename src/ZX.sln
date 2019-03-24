@@ -3,19 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.489
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZX", "ZX\ZX.csproj", "{64D9334B-B630-4E8A-BA54-2F07402DC6BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZX", "ZX\ZX.csproj", "{64D9334B-B630-4E8A-BA54-2F07402DC6BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZX.Model", "ZX.Model\ZX.Model.csproj", "{34774D67-810E-4A5E-B852-EE0A2AF14EF8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZX.Model", "ZX.Model\ZX.Model.csproj", "{34774D67-810E-4A5E-B852-EE0A2AF14EF8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZX.UnitTest", "ZX.UnitTest\ZX.UnitTest.csproj", "{E65BFBFC-45F5-46C2-B895-76258B7E8D9F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZX.UnitTest", "ZX.UnitTest\ZX.UnitTest.csproj", "{E65BFBFC-45F5-46C2-B895-76258B7E8D9F}"
 	ProjectSection(ProjectDependencies) = postProject
 		{34774D67-810E-4A5E-B852-EE0A2AF14EF8} = {34774D67-810E-4A5E-B852-EE0A2AF14EF8}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZX.Service", "ZX.Service\ZX.Service.csproj", "{FF8BE99D-3321-4FCF-873D-10929508D118}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZX.Service", "ZX.Service\ZX.Service.csproj", "{FF8BE99D-3321-4FCF-873D-10929508D118}"
 	ProjectSection(ProjectDependencies) = postProject
 		{34774D67-810E-4A5E-B852-EE0A2AF14EF8} = {34774D67-810E-4A5E-B852-EE0A2AF14EF8}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZX.CLI", "ZX.Utils\ZX.CLI.csproj", "{858566A4-008C-47B9-9C23-5D5E5DFF7775}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{FF8BE99D-3321-4FCF-873D-10929508D118}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF8BE99D-3321-4FCF-873D-10929508D118}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF8BE99D-3321-4FCF-873D-10929508D118}.Release|Any CPU.Build.0 = Release|Any CPU
+		{858566A4-008C-47B9-9C23-5D5E5DFF7775}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{858566A4-008C-47B9-9C23-5D5E5DFF7775}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{858566A4-008C-47B9-9C23-5D5E5DFF7775}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{858566A4-008C-47B9-9C23-5D5E5DFF7775}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

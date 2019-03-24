@@ -12,6 +12,7 @@ namespace ZX.Model
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
+        public string IdAux { get; set; }
         public string TradingName { get; set; }
         public string OwnerName { get; set; }
         public string Document { get; set; } // Cnpj

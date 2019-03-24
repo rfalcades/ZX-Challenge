@@ -1,0 +1,4 @@
+﻿
+db.PDV.createIndex( { "IdAux": 1 }, { unique: true } )
+
+db.PDV.createIndex({ CoverageArea: "2dsphere" })
