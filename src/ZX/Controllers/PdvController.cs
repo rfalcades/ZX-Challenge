@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -47,7 +48,30 @@ namespace ZX.Controllers
             var pdv = new ZX.Service.PDV(config.GetConnectionString("ZXDB"));
             pdv.Create(pdvRaw);
         }
-    
+
+        [HttpGet()]
+        [Route("Importar")]
+        public ActionResult<string> Importar()
+        {
+            try
+            {
+                var json = System.IO.File.ReadAllText($"{System.IO.Directory.GetCurrentDirectory()}\\pdvs.json");
+
+                var pdvs = Newtonsoft.Json.JsonConvert.DeserializeObject<ZX.Model.Api.PdvRawCollection>(json);
+
+                var b = new ZX.Service.PDV(config.GetConnectionString("ZXDB"));
+
+                foreach (var pdv in pdvs.pdvs)
+                    b.Create(pdv);
+
+                return Ok("Ok");
+            }
+            catch (Exception ex)
+            {
+                return Ok(ex.ToString() + " xxxx " + System.IO.Directory.GetCurrentDirectory());
+            }
+        }
+
     }
 
 }

@@ -22,6 +22,18 @@ namespace ZX.Service
             var pdv = ZX.Service.Utils.ConvertFromRaw(pdvRaw);
             zdContext = new Model.DB.ZDContext(connectionString);
 
+            // Verificar se id já existe
+            var aux = zdContext.PDVs.Find(d => d.IdAux == pdv.IdAux).SingleOrDefault();
+
+            if (aux != null)
+                throw new ApplicationException($"Id {pdv.IdAux} já existente. Inclusão não permitida!");
+
+            aux = zdContext.PDVs.Find(d => d.Document == pdv.Document).SingleOrDefault();
+
+            if (aux != null)
+                throw new ApplicationException($"Documento {pdv.Document} já existente. Inclusão não permitida!");
+
+
             zdContext.PDVs.InsertOne(pdv);
         }
 
