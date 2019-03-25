@@ -35,10 +35,18 @@ namespace ZX.Controllers
         }
 
         // GET api/pdv/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        [HttpGet()]
+        [Route("q")]
+        public ActionResult<string> Get(double lat, double lng)
         {
-            return string.Format("Valor {0}", id);
+            var pdvs = new ZX.Service.PDV(config.GetConnectionString("ZXDB"));
+
+            var pdv = pdvs.GetByLatLng(lat, lng);
+
+            if (pdv != null)
+                return Ok(pdv);
+            else
+                return NotFound();
         }
 
         // POST api/values
@@ -49,16 +57,12 @@ namespace ZX.Controllers
             pdv.Create(pdvRaw);
         }
 
-        [HttpGet()]
+        [HttpPost()]
         [Route("Importar")]
-        public ActionResult<string> Importar()
+        public ActionResult<string> Importar(Model.Api.PdvRawCollection pdvs)
         {
             try
             {
-                var json = System.IO.File.ReadAllText($"{System.IO.Directory.GetCurrentDirectory()}\\pdvs.json");
-
-                var pdvs = Newtonsoft.Json.JsonConvert.DeserializeObject<ZX.Model.Api.PdvRawCollection>(json);
-
                 var b = new ZX.Service.PDV(config.GetConnectionString("ZXDB"));
 
                 foreach (var pdv in pdvs.pdvs)

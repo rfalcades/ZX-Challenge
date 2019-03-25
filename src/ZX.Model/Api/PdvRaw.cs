@@ -34,6 +34,16 @@ namespace ZX.Model.Api
 
     public class PdvRawCollection
     {
+        public PdvRawCollection()
+        {
+            this.pdvs = new List<PdvRaw>();
+        }
+
+        public void Add(PdvRaw pdv)
+        {
+            this.pdvs.Add(pdv);
+        }
+
         public List<PdvRaw> pdvs { get; set; }
     }
 }
