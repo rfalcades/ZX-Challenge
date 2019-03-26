@@ -4,6 +4,7 @@ using System.Text;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.GeoJsonObjectModel;
+using System.Linq;
 
 namespace ZX.Service
 {
@@ -18,6 +19,9 @@ namespace ZX.Service
 
         private ZX.Model.DB.ZDContext zdContext = null;
 
+        /// <summary>
+        /// Realiza a inclusão de um novo PDV
+        /// </summary>
         public void Create(Model.Api.PdvRaw pdvRaw)
         {
             var pdv = ZX.Service.Utils.ConvertFromRaw(pdvRaw);
@@ -38,6 +42,11 @@ namespace ZX.Service
             zdContext.PDVs.InsertOne(pdv);
         }
 
+        /// <summary>
+        /// Faz a busca pelo CNPJ do PDV e retorna se encontrado
+        /// </summary>
+        /// <param name="document">Numero do CNPJ</param>
+        /// <returns></returns>
         public Model.Api.PdvRaw GetByDocument(string document)
         {
             zdContext = new Model.DB.ZDContext(connectionString);
@@ -51,42 +60,36 @@ namespace ZX.Service
             return pdvRaw;
         }
 
-        public Model.Api.PdvRawCollection GetByLatLng(double lat, double lng)
+        /// <summary>
+        /// Dado uma latitude e longitude, retorna pelo PDV mais próximo
+        /// </summary>
+        /// <param name="lat">Latitude</param>
+        /// <param name="lng">Longitude</param>
+        /// <returns></returns>
+        public Model.Api.PdvRaw GetByLatLng(double lat, double lng)
         {
             zdContext = new Model.DB.ZDContext(connectionString);
 
-            //var geoNearOptions = new BsonDocument {
-            //            { "nearSphere", new BsonDocument {
-            //                { "type", "Point" },
-            //                { "coordinates", new BsonArray { lng, lat} },
-            //            } },
-            //            //{ "distanceField", "dist.calculated" },
-            //            // { "maxDistance", 100 },
-            //            // { "includeLocs", "dist.location" },
-            //            // { "num", 5 },
-            //            // { "spherical" , true }
-            //    };
+            // Define o ponto de referência
+            var p = new GeoJsonPoint<GeoJson2DGeographicCoordinates>(new GeoJson2DGeographicCoordinates(lng, lat));
 
-            //var q = new BsonDocument { { "$geoNear", geoNearOptions } };
+            // Monta o filtro pra retornar os PDVs que atendem o ponto informado
+            var q = Builders<Model.PDV>.Filter.GeoIntersects(_ => _.CoverageArea, p);
 
-            var q = new BsonDocument { {"CoverageArea" ,
-                new BsonDocument { {"$nearSphere",
-                new BsonDocument { {"$geometry",
-                new BsonDocument {
-                            { "type", "Point" },
-                            { "coordinates", new BsonArray { lng, lat} },
-                        } } } } } } };
-
+            // Retorna todos os PDVs cujo ponto informado é atendido
             var pdvs = zdContext.PDVs.Find(q).ToList();
 
-            Model.Api.PdvRawCollection pdvsRaw = new Model.Api.PdvRawCollection();
+            Model.Api.PdvRaw pdvRaw = null;
 
-            if (pdvs != null)
-                foreach (var pdv in pdvs)
-                    pdvsRaw.Add(Utils.ConvertToRaw(pdv));
+            if (pdvs != null && pdvs.Count > 0)
+            {
+                var pdvMaisPerto = pdvs.OrderBy(_ => _.DistanceFrom(lng, lat)).ToList()[0];
 
-            return pdvsRaw;
+                // Transforma pro modelo de apresentação
+                pdvRaw = Utils.ConvertToRaw(pdvMaisPerto);
+            }
+
+            return pdvRaw;
         }
-
     }
 }

@@ -230,5 +230,19 @@ namespace ZX.UnitTest
             var pdvRaw = bll.GetByDocument("02.453.716/000170");
         }
 
+        [TestMethod]
+        public void Distance()
+        {
+            // BF -46.656427, -23.528184
+            // JC -46.701694, -23.579419
+
+            // Ref 1 -46.693768, -23.569365
+
+            var d1 = ZX.Service.Utils.DistanceBetweenPlaces(-46.693768, -23.569365, -46.656427, -23.528184);
+            var d2 = ZX.Service.Utils.DistanceBetweenPlaces(-46.693768, -23.569365, -46.701694, -23.579419);
+
+
+        }
+
     }
 }

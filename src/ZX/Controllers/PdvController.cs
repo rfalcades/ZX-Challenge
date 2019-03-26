@@ -44,8 +44,10 @@ namespace ZX.Controllers
             var pdv = pdvs.GetByLatLng(lat, lng);
 
             if (pdv != null)
+                // Retorna o PDV encontrado
                 return Ok(pdv);
             else
+                // Nenhum PDV atende o ponto informado
                 return NotFound();
         }
 

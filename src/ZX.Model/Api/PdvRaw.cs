@@ -29,7 +29,7 @@ namespace ZX.Model.Api
         public string ownerName { get; set; }
         public string document { get; set; }
         public CoverageArea coverageArea { get; set; }
-        public Address address { get; set; }
+        public Address address { get; set; }     
     }
 
     public class PdvRawCollection
@@ -44,6 +44,6 @@ namespace ZX.Model.Api
             this.pdvs.Add(pdv);
         }
 
-        public List<PdvRaw> pdvs { get; set; }
-    }
+        public List<PdvRaw> pdvs { get; set; }    
+    } 
 }

@@ -21,7 +21,7 @@ namespace ZX.Service
             pdvRaw.document = pdv.Document;
 
             pdvRaw.address.type = "Point";
-            pdvRaw.address.coordinates = new List<double>() { pdv.Address.Coordinates.Latitude, pdv.Address.Coordinates.Longitude };
+            pdvRaw.address.coordinates = new List<double>() { pdv.Address.Coordinates.Longitude, pdv.Address.Coordinates.Latitude };
 
             pdvRaw.coverageArea.type = "MultiPolygon";
             pdvRaw.coverageArea.coordinates = new List<List<List<List<double>>>>();
@@ -29,7 +29,7 @@ namespace ZX.Service
             pdvRaw.coverageArea.coordinates[0].Add(new List<List<double>>());
 
             foreach (var p in pdv.CoverageArea.Coordinates.Exterior.Positions)
-                pdvRaw.coverageArea.coordinates[0][0].Add(new List<double>() { p.Latitude, p.Longitude });
+                pdvRaw.coverageArea.coordinates[0][0].Add(new List<double>() { p.Longitude, p.Latitude });
 
             return pdvRaw;
         }
@@ -43,13 +43,13 @@ namespace ZX.Service
             pdv.OwnerName = pdvRaw.ownerName;
             pdv.Document = pdvRaw.document;
 
-            pdv.Address = GeoJson.Point(new GeoJson2DGeographicCoordinates(pdvRaw.address.coordinates[1], pdvRaw.address.coordinates[0]));
+            pdv.Address = GeoJson.Point(new GeoJson2DGeographicCoordinates(pdvRaw.address.coordinates[0], pdvRaw.address.coordinates[1]));
 
             var coverageArea = new List<GeoJson2DGeographicCoordinates>();
             foreach (var p in pdvRaw.coverageArea.coordinates)
                 foreach (var p1 in p)
                     foreach (var p2 in p1)
-                        coverageArea.Add(GeoJson.Geographic(p2[1], p2[0]));
+                        coverageArea.Add(GeoJson.Geographic(p2[0], p2[1]));
 
             pdv.CoverageArea = GeoJson.Polygon(coverageArea.ToArray());
 
@@ -80,6 +80,5 @@ namespace ZX.Service
 
             return pdv;
         }
-
     }
 }
