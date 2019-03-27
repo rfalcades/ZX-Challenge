@@ -61,6 +61,24 @@ namespace ZX.Service
         }
 
         /// <summary>
+        /// Retorna o PDV pelo Id
+        /// </summary>
+        /// <param name="id">Id do PDV</param>
+        /// <returns></returns>
+        public Model.Api.PdvRaw GetById(int id)
+        {
+            zdContext = new Model.DB.ZDContext(connectionString);
+
+            var pdv = zdContext.PDVs.Find(d => d.IdAux == id).SingleOrDefault();
+
+            Model.Api.PdvRaw pdvRaw = null;
+            if (pdv != null)
+                pdvRaw = Utils.ConvertToRaw(pdv);
+
+            return pdvRaw;
+        }
+
+        /// <summary>
         /// Dado uma latitude e longitude, retorna pelo PDV mais próximo
         /// </summary>
         /// <param name="lat">Latitude</param>
@@ -83,6 +101,7 @@ namespace ZX.Service
 
             if (pdvs != null && pdvs.Count > 0)
             {
+                // Ordena por distância do PDV e seleciona o primeiro
                 var pdvMaisPerto = pdvs.OrderBy(_ => _.DistanceFrom(lng, lat)).ToList()[0];
 
                 // Transforma pro modelo de apresentação

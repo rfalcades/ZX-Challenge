@@ -238,8 +238,8 @@ namespace ZX.UnitTest
 
             // Ref 1 -46.693768, -23.569365
 
-            var d1 = ZX.Service.Utils.DistanceBetweenPlaces(-46.693768, -23.569365, -46.656427, -23.528184);
-            var d2 = ZX.Service.Utils.DistanceBetweenPlaces(-46.693768, -23.569365, -46.701694, -23.579419);
+            // var d1 = ZX.Service.Utils.DistanceBetweenPlaces(-46.693768, -23.569365, -46.656427, -23.528184);
+            // var d2 = ZX.Service.Utils.DistanceBetweenPlaces(-46.693768, -23.569365, -46.701694, -23.579419);
 
 
         }
