@@ -58,4 +58,15 @@ Obs: Pode ser que o teste falhe por causa da restrição de firewall no banco de
 
 * Acesse a [documentação local](https://localhost:5001/swagger)
 
+### Organização do Código
+
+O código está dividido assim:
+
+* ZX - Ponto de entrada de API onde está o executável principal (WebApi)
+* ZX.Model - Modelo de Classes e acesso ao banco
+* ZX.Service - Ou worker, é onde estão as regras que servem tanto a WebApi quanto a CLI
+* ZX.CLI - Ou Command Line Interface, é uma aplicação de apoio para executar linhas de comando
+* ZX.UnitTest - Projeto de testes unitários
+
+
 
