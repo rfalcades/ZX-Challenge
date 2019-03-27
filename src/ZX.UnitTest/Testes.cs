@@ -1,10 +1,12 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MongoDB.Driver.GeoJsonObjectModel;
+using System;
+using System.Linq;
 
 namespace ZX.UnitTest
 {
     [TestClass]
-    public class UnitTest1
+    public class Testes
     {
         private ZX.Model.DB.ZDContext zdContext = null;
 
@@ -16,11 +18,12 @@ namespace ZX.UnitTest
             zdContext = new Model.DB.ZDContext(connectionString);
 
             var pdv = new Model.PDV();
-            
-            pdv.TradingName = "Adega Osasco";
-            pdv.OwnerName = "Ze da Ambev";
-            pdv.Document = "02.453.716/000170";
-            pdv.Address = GeoJson.Point(new GeoJson2DGeographicCoordinates(-23.013538, -43.297337));
+
+            pdv.IdAux = 0;
+            pdv.TradingName = "Adega Osasco 2";
+            pdv.OwnerName = "Ze da Ambev 2 ";
+            pdv.Document = "05.453.716/000170";
+            pdv.Address = GeoJson.Point(new GeoJson2DGeographicCoordinates( -23.013538, -43.297337));
 
             pdv.CoverageArea = GeoJson.Polygon(
                                GeoJson.Geographic(-22.99669, -43.36556),
@@ -52,9 +55,9 @@ namespace ZX.UnitTest
                                GeoJson.Geographic(-22.99351, -43.36636),
                                GeoJson.Geographic(-22.99669, -43.36556));
 
-            zdContext.PDVs.InsertOne(pdv);
+            // zdContext.PDVs.InsertOne(pdv);
+            Assert.IsTrue(1 == 1);
         }
-
 
         [TestMethod]
         public void Deserialize_Test()
@@ -217,17 +220,35 @@ namespace ZX.UnitTest
         [TestMethod]
         public void GetById()
         {
+            try
+            {
+                var connectionString = "mongodb+srv://dbUsert:db123_A@cluster0-lciu8.azure.mongodb.net/ZD?retryWrites=true";
+                var bll = new ZX.Service.PDV(connectionString);
+                var pdvRaw = bll.GetById(1);
 
+                Assert.IsTrue(pdvRaw != null);
+            }
+            catch
+            {
+                Assert.Fail();
+            }
         }
 
         [TestMethod]
         public void GetByDocument()
         {
-            var connectionString = "mongodb+srv://dbUsert:db123_A@cluster0-lciu8.azure.mongodb.net/ZD?retryWrites=true";
+            try
+            {
+                var connectionString = "mongodb+srv://dbUsert:db123_A@cluster0-lciu8.azure.mongodb.net/ZD?retryWrites=true";
+                var bll = new ZX.Service.PDV(connectionString);
+                var pdvRaw = bll.GetByDocument("02.453.716/000170");
 
-            var bll = new ZX.Service.PDV(connectionString);
-
-            var pdvRaw = bll.GetByDocument("02.453.716/000170");
+                Assert.IsTrue(pdvRaw != null);
+            }
+            catch 
+            {
+                Assert.Fail();
+            }
         }
 
         [TestMethod]
@@ -235,14 +256,12 @@ namespace ZX.UnitTest
         {
             // BF -46.656427, -23.528184
             // JC -46.701694, -23.579419
-
             // Ref 1 -46.693768, -23.569365
 
-            // var d1 = ZX.Service.Utils.DistanceBetweenPlaces(-46.693768, -23.569365, -46.656427, -23.528184);
-            // var d2 = ZX.Service.Utils.DistanceBetweenPlaces(-46.693768, -23.569365, -46.701694, -23.579419);
+            var d1 = ZX.Model.DistanceUtil.DistanceBetweenPlaces(-46.693768, -23.569365, -46.656427, -23.528184);
+            var d2 = ZX.Model.DistanceUtil.DistanceBetweenPlaces(-46.693768, -23.569365, -46.701694, -23.579419);
 
-
+            Assert.IsTrue(d1 != d2);
         }
-
     }
 }

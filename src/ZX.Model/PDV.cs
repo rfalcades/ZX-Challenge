@@ -29,7 +29,7 @@ namespace ZX.Model
 
     public class DistanceUtil
     {
-        internal static double DistanceBetweenPlaces(double lon1, double lat1, double lon2, double lat2)
+        public static double DistanceBetweenPlaces(double lon1, double lat1, double lon2, double lat2)
         {
             double R = 6371; // km            
 

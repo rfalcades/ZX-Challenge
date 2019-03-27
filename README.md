@@ -10,17 +10,28 @@
 ## Você pode conferir a API em
 * [Documentação](https://zx20190326101938.azurewebsites.net/swagger/index.html)
 * [API](https://zx20190326101938.azurewebsites.net/api)
-* Obs.: Não fazer teste de carga nesse ambiente
+
+### Exemplo
+
+Buscar um PDV na [Barra Funda](https://zx20190326101938.azurewebsites.net/api/pdv/latlng?lat=-23.528184&lng=-46.656427)
+
+Obs.: Não fazer teste de carga nesse ambiente
 
 ## Pré Requisitos (Executar localmente)
 
-### Para compilar
+### Compilar
 
 * Baixe o SDK do .net core em [download](https://dotnet.microsoft.com/download) e siga as instruções de instalação de acordo com a plataforma
 * Clone esse repositório ou faça download do pacote e expanda numa pasta local
 * Acesse a pasta `src` na pasta de destino e rode o comando: `dotnet build` 
 
-### Para executar
+### Rodar testes 
+
+* Acesse a pasta `src` na pasta de destino e rode o comando: `dotnet test`
+
+Obs: Pode ser que o teste falhe por causa da restrição de firewall no banco de dados
+
+### Executar localmente
 
 * Acesse a pasta `src` na pasta de destino e rode o comando: `dotnet run --project .\zx\zx.csproj`
 * A api estará disponível em `https://localhost:5001`
@@ -35,6 +46,14 @@
 	* db.PDV.createIndex({ CoverageArea: "2dsphere" })
 	* db.PDV.createIndex({ Address: "2dsphere" })
 
+* Configurar a string de conexão com o banco de dados em appsettings.json 
+
+```
+  "ConnectionStrings": {
+    "ZXDB": "mongodb://localhost:27017/ZD?retryWrites=true"
+  }
+```
+	   
 ### API
 
 * Acesse a [documentação local](https://localhost:5001/swagger)
