@@ -7,28 +7,28 @@
 * Azure Websites as Hosting Service
 * MongoDb Atlas
 
-## Você pode conferir a API em
-* [Documentação] (https://zx20190326101938.azurewebsites.net/swagger/index.html)
-* [API] (https://zx20190326101938.azurewebsites.net/api)
-* Obs.: Não fazer teste de carga nesse ambiente
+## VocÃª pode conferir a API em
+* [DocumentaÃ§Ã£o](https://zx20190326101938.azurewebsites.net/swagger/index.html)
+* [API](https://zx20190326101938.azurewebsites.net/api)
+* Obs.: NÃ£o fazer teste de carga nesse ambiente
 
-## Pré Requisitos (Executar localmente)
+## PrÃ© Requisitos (Executar localmente)
 
 ### Para compilar
 
-* Baixe o SDK do .net core em [download] (https://dotnet.microsoft.com/download) e siga as instruções de instalação de acordo com a plataforma
-* Clone esse repositório ou faça download do pacote e expanda numa pasta local
+* Baixe o SDK do .net core em [download](https://dotnet.microsoft.com/download) e siga as instruÃ§Ãµes de instalaÃ§Ã£o de acordo com a plataforma
+* Clone esse repositÃ³rio ou faÃ§a download do pacote e expanda numa pasta local
 * Acesse a pasta `src` na pasta de destino e rode o comando: `dotnet build` 
 
 ### Para executar
 
 * Acesse a pasta `src` na pasta de destino e rode o comando: `dotnet run --project .\zx\zx.csproj`
-* A api estará disponível em `https://localhost:5001`
+* A api estarÃ¡ disponÃ­vel em `https://localhost:5001`
 
 ### Instalar o mongodb
 
-* Acesse [mongo download](https://www.mongodb.com/download-center/community) e faça o download ou siga as instruçoes de instalação
-* Inicie uma instância do mongo com o comando `mongod`
+* Acesse [mongo download](https://www.mongodb.com/download-center/community) e faÃ§a o download ou siga as instruÃ§oes de instalaÃ§Ã£o
+* Inicie uma instÃ¢ncia do mongo com o comando `mongod`
 * Acesse o shell do mongo com o comando `mongo` e execute o script:
 	* use ZD
 	* db.PDV.createIndex( { "IdAux": 1 }, { unique: true } )
@@ -37,6 +37,6 @@
 
 ### API
 
-* Acesse a documentação em (https://localhost:5001/swagger)
+* Acesse a [documentaÃ§Ã£o local](https://localhost:5001/swagger)
 
 
