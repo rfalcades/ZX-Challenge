@@ -8,15 +8,17 @@ namespace ZX.UnitTest
     [TestClass]
     public class Testes
     {
-        private ZX.Model.DB.ZDContext zdContext = null;
+        private ZX.Service.IPDV pdvService = null;
+
+        public Testes()
+        {
+            var connectionString = "mongodb+srv://dbUsert:db123_A@cluster0-lciu8.azure.mongodb.net/ZD?retryWrites=true";
+            pdvService = new Service.PDV(new Model.DB.ZDContext(connectionString));
+        }
 
         [TestMethod]
         public void Insert_One()
         {
-            var connectionString = "mongodb+srv://dbUsert:db123_A@cluster0-lciu8.azure.mongodb.net/ZD?retryWrites=true";
-
-            zdContext = new Model.DB.ZDContext(connectionString);
-
             var pdv = new Model.PDV();
 
             pdv.IdAux = 0;
@@ -222,9 +224,7 @@ namespace ZX.UnitTest
         {
             try
             {
-                var connectionString = "mongodb+srv://dbUsert:db123_A@cluster0-lciu8.azure.mongodb.net/ZD?retryWrites=true";
-                var bll = new ZX.Service.PDV(connectionString);
-                var pdvRaw = bll.GetById(1);
+                var pdvRaw = pdvService.GetById(1);
 
                 Assert.IsTrue(pdvRaw != null);
             }
@@ -239,9 +239,7 @@ namespace ZX.UnitTest
         {
             try
             {
-                var connectionString = "mongodb+srv://dbUsert:db123_A@cluster0-lciu8.azure.mongodb.net/ZD?retryWrites=true";
-                var bll = new ZX.Service.PDV(connectionString);
-                var pdvRaw = bll.GetByDocument("02.453.716/000170");
+                var pdvRaw = pdvService.GetByDocument("02.453.716/000170");
 
                 Assert.IsTrue(pdvRaw != null);
             }

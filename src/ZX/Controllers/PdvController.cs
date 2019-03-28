@@ -16,15 +16,16 @@ namespace ZX.Controllers
     [ApiController]
     public class PdvController : ControllerBase
     {
-        private readonly IConfiguration config;
+
+        private readonly Service.IPDV pdvService;
 
         /// <summary>
         /// Construtor
         /// </summary>
-        /// <param name="config"></param>
-        public PdvController(IConfiguration config)
+        /// <param name="pdvService"></param>
+        public PdvController(Service.IPDV pdvService)
         {
-            this.config = config;
+            this.pdvService = pdvService;
         }
 
         /// <summary>
@@ -36,9 +37,7 @@ namespace ZX.Controllers
         [Route("documento/{cnpj}")]
         public ActionResult<Model.Api.PdvRaw> GetByDocumento(string cnpj)
         {
-            var pdvs = new ZX.Service.PDV(config.GetConnectionString("ZXDB"));
-
-            var pdv = pdvs.GetByDocument(cnpj);
+            var pdv = pdvService.GetByDocument(cnpj);
 
             if (pdv != null)
                 return Ok(pdv);
@@ -55,9 +54,7 @@ namespace ZX.Controllers
         [Route("{id}")]
         public ActionResult<Model.Api.PdvRaw> GetById(int id)
         {
-            var pdvs = new ZX.Service.PDV(config.GetConnectionString("ZXDB"));
-
-            var pdv = pdvs.GetById(id);
+            var pdv = pdvService.GetById(id);
 
             if (pdv != null)
                 return Ok(pdv);
@@ -75,9 +72,7 @@ namespace ZX.Controllers
         [Route("LatLng")]
         public ActionResult<Model.Api.PdvRaw> GetByLatLng(double lat, double lng)
         {
-            var pdvs = new ZX.Service.PDV(config.GetConnectionString("ZXDB"));
-
-            var pdv = pdvs.GetByLatLng(lat, lng);
+            var pdv = pdvService.GetByLatLng(lat, lng);
 
             if (pdv != null)
                 // Retorna o PDV encontrado
@@ -94,8 +89,7 @@ namespace ZX.Controllers
         [HttpPost]
         public void Post([FromBody] Model.Api.PdvRaw pdvRaw)
         {
-            var pdv = new ZX.Service.PDV(config.GetConnectionString("ZXDB"));
-            pdv.Create(pdvRaw);
+            pdvService.Create(pdvRaw);
         }
 
         /// <summary>
@@ -107,12 +101,10 @@ namespace ZX.Controllers
         [Route("Importar")]
         public ActionResult<string> Importar(Model.Api.PdvRawCollection pdvs)
         {
-            var b = new ZX.Service.PDV(config.GetConnectionString("ZXDB"));
-
             foreach (var pdv in pdvs.pdvs)
                 try
                 {
-                    b.Create(pdv);
+                    pdvService.Create(pdv);
                 }
                 catch
                 {

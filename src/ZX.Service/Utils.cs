@@ -38,7 +38,9 @@ namespace ZX.Service
         {
             var pdv = new Model.PDV();
 
-            pdv.IdAux = int.Parse(pdvRaw.id);
+            if (pdvRaw.id != null)
+                pdv.IdAux = int.Parse(pdvRaw.id);
+
             pdv.TradingName = pdvRaw.tradingName;
             pdv.OwnerName = pdvRaw.ownerName;
             pdv.Document = pdvRaw.document;

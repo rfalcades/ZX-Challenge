@@ -29,6 +29,9 @@ namespace ZX
         {
             services.AddMvc();
 
+            services.AddTransient<ZX.Model.DB.IDbContext, ZX.Model.DB.ZDContext>();
+            services.AddTransient<ZX.Service.IPDV, ZX.Service.PDV>();
+
             services.AddSwaggerDocument(config =>
             {
                 config.PostProcess = document =>

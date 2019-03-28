@@ -1,14 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 
 namespace ZX.Model.DB
 {
-    public class ZDContext
+    public class ZDContext : IDbContext
     {
         private readonly IMongoClient _client;
         private readonly IMongoDatabase _database;
+
+        public ZDContext(IConfiguration config) : 
+            this(config.GetConnectionString("ZXDB"))
+        {
+
+        }
 
         public ZDContext(string connectionString)
         {
@@ -25,6 +32,7 @@ namespace ZX.Model.DB
         {
             get { return _database.GetCollection<Model.PDV>("PDV"); }
         }
-
     }
+
+    
 }

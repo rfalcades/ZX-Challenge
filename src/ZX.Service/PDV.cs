@@ -8,16 +8,17 @@ using System.Linq;
 
 namespace ZX.Service
 {
-    public class PDV
+    /// <summary>
+    /// 
+    /// </summary>
+    public class PDV : IPDV
     {
-        private readonly string connectionString;
+        private readonly Model.DB.IDbContext zdContext = null;
 
-        public PDV(string connectionString)
+        public PDV(Model.DB.IDbContext zdContext) 
         {
-            this.connectionString = connectionString;
+            this.zdContext = zdContext;
         }
-
-        private ZX.Model.DB.ZDContext zdContext = null;
 
         /// <summary>
         /// Realiza a inclusão de um novo PDV
@@ -25,19 +26,28 @@ namespace ZX.Service
         public void Create(Model.Api.PdvRaw pdvRaw)
         {
             var pdv = ZX.Service.Utils.ConvertFromRaw(pdvRaw);
-            zdContext = new Model.DB.ZDContext(connectionString);
 
-            // Verificar se id já existe
-            var aux = zdContext.PDVs.Find(d => d.IdAux == pdv.IdAux).SingleOrDefault();
-
-            if (aux != null)
-                throw new ApplicationException($"Id {pdv.IdAux} já existente. Inclusão não permitida!");
-
-            aux = zdContext.PDVs.Find(d => d.Document == pdv.Document).SingleOrDefault();
+            var aux = this.GetByDocument(pdv.Document);
 
             if (aux != null)
                 throw new ApplicationException($"Documento {pdv.Document} já existente. Inclusão não permitida!");
 
+            if (pdv.IdAux == 0)
+            {
+                pdv.IdAux = this.GetMaxId();
+            }
+            else
+            {
+                // Verificar se id já existe
+                aux = this.GetById(pdv.IdAux);
+            }
+
+            if (aux != null)
+                throw new ApplicationException($"Id {pdv.IdAux} já existente. Inclusão não permitida!");
+
+
+            if (pdv.Address == null || pdv.CoverageArea == null || string.IsNullOrEmpty(pdv.Document) || string.IsNullOrEmpty(pdv.OwnerName) || string.IsNullOrEmpty(pdv.TradingName))
+                throw new ApplicationException($"Modelo inválido");
 
             zdContext.PDVs.InsertOne(pdv);
         }
@@ -49,8 +59,6 @@ namespace ZX.Service
         /// <returns></returns>
         public Model.Api.PdvRaw GetByDocument(string document)
         {
-            zdContext = new Model.DB.ZDContext(connectionString);
-
             var pdv = zdContext.PDVs.Find(d => d.Document == document.Trim()).SingleOrDefault();
 
             Model.Api.PdvRaw pdvRaw = null;
@@ -67,11 +75,10 @@ namespace ZX.Service
         /// <returns></returns>
         public Model.Api.PdvRaw GetById(int id)
         {
-            zdContext = new Model.DB.ZDContext(connectionString);
-
             var pdv = zdContext.PDVs.Find(d => d.IdAux == id).SingleOrDefault();
 
             Model.Api.PdvRaw pdvRaw = null;
+
             if (pdv != null)
                 pdvRaw = Utils.ConvertToRaw(pdv);
 
@@ -86,8 +93,6 @@ namespace ZX.Service
         /// <returns></returns>
         public Model.Api.PdvRaw GetByLatLng(double lat, double lng)
         {
-            zdContext = new Model.DB.ZDContext(connectionString);
-
             // Define o ponto de referência
             var p = new GeoJsonPoint<GeoJson2DGeographicCoordinates>(new GeoJson2DGeographicCoordinates(lng, lat));
 
@@ -110,5 +115,31 @@ namespace ZX.Service
 
             return pdvRaw;
         }
+
+        private int GetMaxId()
+        {
+            // db.collection.aggregate({ $group: { _id: null, max: { $max: "$age" } } });
+            var aggregate = zdContext.PDVs.Aggregate()
+                                      .Group( new BsonDocument { { "_id", 0 }, { "max", new BsonDocument("$max", "$IdAux") } })
+                                      .Limit(1);
+
+            var result = aggregate.SingleOrDefault();
+
+            if (result is null)
+                return 1;
+
+            return result["max"].AsInt32 + 1;
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface IPDV
+    {
+        void Create(Model.Api.PdvRaw pdvRaw);
+        Model.Api.PdvRaw GetByDocument(string document);
+        Model.Api.PdvRaw GetById(int id);
+        Model.Api.PdvRaw GetByLatLng(double lat, double lng);
     }
 }
