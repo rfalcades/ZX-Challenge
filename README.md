@@ -13,7 +13,7 @@
 
 ### Exemplo
 
-Buscar um PDV na [Barra Funda](https://zx20190326101938.azurewebsites.net/api/pdv/latlng?lat=-23.528184&lng=-46.656427)
+Buscar um PDV na [Barra Funda](https://zx20190326101938.azurewebsites.net/api/pdv/latlng?lat=-23.528184&lng=-46.656427) `https://zx20190326101938.azurewebsites.net/api/pdv/latlng?lat=-23.528184&lng=-46.656427`
 
 Obs.: Não fazer teste de carga nesse ambiente
 
