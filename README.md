@@ -7,13 +7,13 @@
 * Azure Websites as Hosting Service
 * MongoDb Atlas
 
-## Você pode conferir a API em
+### Você pode conferir a API funcionando em
 * [Documentação](https://zx20190326101938.azurewebsites.net/swagger/index.html)
 * [API](https://zx20190326101938.azurewebsites.net/api)
 
 ### Exemplo
 
-Buscar um PDV na [Barra Funda](https://zx20190326101938.azurewebsites.net/api/pdv/latlng?lat=-23.528184&lng=-46.656427)
+Buscar um PDV na [Barra Funda](https://zx20190326101938.azurewebsites.net/api/pdv/latlng?lat=-23.528184&lng=-46.656427) `https://zx20190326101938.azurewebsites.net/api/pdv/latlng?lat=-23.528184&lng=-46.656427`
 
 Obs.: Não fazer teste de carga nesse ambiente
 
@@ -48,6 +48,7 @@ Obs: Pode ser que o teste falhe por causa da restrição de firewall no banco de
 
 * Configurar a string de conexão com o banco de dados em appsettings.json 
 
+
 ```
   "ConnectionStrings": {
     "ZXDB": "mongodb://localhost:27017/ZD?retryWrites=true"
@@ -57,5 +58,20 @@ Obs: Pode ser que o teste falhe por causa da restrição de firewall no banco de
 ### API
 
 * Acesse a [documentação local](https://localhost:5001/swagger)
+
+### Organização do Código
+
+O código está dividido assim:
+
+* ZX - Ponto de entrada de API onde está o executável principal (WebApi)
+* ZX.Model - Modelo de Classes e acesso ao banco
+* ZX.Service - Ou worker, é onde estão as regras que servem tanto a WebApi quanto a CLI
+* ZX.CLI - Ou Command Line Interface, é uma aplicação de apoio para executar linhas de comando
+* ZX.UnitTest - Projeto de testes unitários
+
+## Obs
+* No arquivo de exemplo, existem 3 Pdvs com coordenadas cruzadas (Ids 6, 8 e 17). Esses ids foram removidos do banco para que o índice 2d pudesse ser criado.
+* Ao criar um novo PDV, se der algum problema irá retornar um status 500 - Internal Server Error sem maiores detalhes de propósito para não export detalhes de implementação. Em um cenário real, eu colocaria um sofware como logstah para ouvir os logs e consolidar no kibana ou similar.
+* Como próximos passos seria interessante utilizar containers para facilitar o deploy. 
 
 
